@@ -50,7 +50,7 @@ jobs:
         prerelease: false
     - uses: actions/upload-release-asset@v1
       env:
-        GITHUB_TOKEN: ${{ github.token }}
+        GITHUB_TOKEN: ${{ secrets.PAT }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_name: steamStorageOptimiser.exe
