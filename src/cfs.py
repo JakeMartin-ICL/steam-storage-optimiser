@@ -1,6 +1,6 @@
 import os
 import sys
-from colorama import init, Fore, Back, Style
+from colorama import init, Fore, Style
 init()
 
 

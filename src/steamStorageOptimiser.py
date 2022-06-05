@@ -7,7 +7,7 @@ import pandas as pd
 from hurry.filesize import size as prettySize
 from datetime import timedelta
 from cfs import error, warn, ok, note
-from colorama import init, Fore, Back, Style
+from colorama import init, Fore, Style
 init()
 
 
@@ -27,7 +27,7 @@ def load_config():
         steamid = input(
             "Enter your 64-bit SteamID (eg. use this tool https://www.steamidfinder.com/): ")
         config = {"key": key, "steamid": steamid,
-                  "install_dir": "C:\Program Files (x86)\Steam\steamapps"}
+                  "install_dir": "C:\\Program Files (x86)\\Steam\\steamapps"}
         with open("config.json", 'w') as f:
             json.dump(config, f)
         ok("Saved new config file.")
@@ -45,7 +45,7 @@ def get_api_response(config):
     api_response = requests.get(url, params=payload)
     try:
         api_response = api_response.json()["response"]["games"]
-    except json.decoder.JSONDecodeError as e:
+    except json.decoder.JSONDecodeError:
         error(
             f"API response invalid. Expected data, recieved:\n{api_response.text}. \n{Fore.YELLOW}Check your config?{Style.RESET_ALL}{config}")
     return {game["appid"]: game for game in api_response}
@@ -55,7 +55,7 @@ def get_library_paths(config):
     try:
         with open(f"{config['install_dir']}\\libraryfolders.vdf") as f:
             libraries = vdf.parse(f)["libraryfolders"]
-    except FileNotFoundError as e:
+    except FileNotFoundError:
         error(
             f"Problem with libraryfolders file. If Steam not installed at {Fore.YELLOW}{config['install_dir']}{Style.RESET_ALL}, edit your config file and try again.")
 
@@ -81,7 +81,7 @@ def match_games(config, api_dict):
                     appid = int(game["appid"])
                     try:
                         api_info = api_dict[appid]
-                    except KeyError as e:
+                    except KeyError:
                         note(f"Failed to match {appid}: {game['name']}.")
                     else:
                         playtime = api_info["playtime_forever"]
