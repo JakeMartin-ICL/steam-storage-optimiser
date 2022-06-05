@@ -23,15 +23,15 @@ class bcolors:
 
 def load_config():
     try:
-        config = json.load(open('config.json'))
-        print(f"{bcolors.OKGREEN}Loaded config file.{bcolors.ENDC} To change, delete the config file to run setup again, or edit it directly.")
+        with open('config.json') as f:
+            config = json.load(f)
     except:
         print(f"{bcolors.WARNING}No config file found.{bcolors.ENDC}")
         key = input("Enter your API key (create one here: https://steamcommunity.com/dev/apikey (domain is irrelevant)): ")
         steamid = input("Enter your 64-bit SteamID (eg. use this tool https://www.steamidfinder.com/): ")
         config = {"key" : key, "steamid" : steamid, "install_dir" : "C:\Program Files (x86)\Steam\steamapps"}
-        with open("config.json", 'w') as configfile:
-            json.dump(config, configfile)
+        with open("config.json", 'w') as f:
+            json.dump(config, f)
         input(f"{bcolors.OKGREEN}Saved new config file.{bcolors.ENDC} Press any key to continue.")
     return config
 
@@ -50,7 +50,8 @@ def get_api_response(config):
 
 def get_library_paths(config):
     try:
-        libraries = vdf.parse(open(f"{config['install_dir']}\\libraryfolders.vdf"))["libraryfolders"]
+        with open(f"{config['install_dir']}\\libraryfolders.vdf") as f:
+            libraries = vdf.parse(f)["libraryfolders"]
     except:
         print(f"{bcolors.FAIL}Problem with libraryfolders file.{bcolors.ENDC} If Steam not installed at {bcolors.WARNING}{config['install_dir']}{bcolors.ENDC}, edit your config file and try again")
         os.system("pause")
@@ -70,7 +71,8 @@ def match_games(config, api_dict):
         print(f"{bcolors.OKCYAN}Found {len(manifests)} in library {library_path}{bcolors.ENDC}")
         for manifest in manifests:
             try:
-                manifest = vdf.parse(open(manifest))
+                with open(manifest) as f:
+                    manifest = vdf.parse(f)
                 for game in manifest.values():
                     #print(game["appid"])
                     appid = int(game["appid"])
