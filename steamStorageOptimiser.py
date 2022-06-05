@@ -86,8 +86,8 @@ def match_games(config, api_dict):
                         size = int(game["SizeOnDisk"])
                         if size != 0:
                             games.append({"name": game["name"],
-                                          "size": size,
-                                          "sizeGB": prettySize(size),
+                                          "bsize": size,
+                                          "size": prettySize(size),
                                           "playtime": playtime,
                                           "playtimeH": '{:02d}:{:02d}'.format(*divmod(playtime, 60)),
                                           "timePerByte": playtime/size,
@@ -116,14 +116,14 @@ def output_games(games):
     df = pd.DataFrame(games)
     df.sort_values("timePerByte", ascending=False, inplace=True)
     df["cumulativeTime"] = df["playtime"].cumsum()
-    df["cumulativeSize"] = df["size"].cumsum()
+    df["cumulativeSize"] = df["bsize"].cumsum()
     df.cumulativeTime = df.cumulativeTime.apply(
         lambda x: '{:02d}:{:02d}'.format(*divmod(x, 60)))
     df.cumulativeSize = df.cumulativeSize.apply(humansize)
 
     print(
         f"\n{Fore.CYAN}Found and matched {df.shape[0]} installed games: {Style.RESET_ALL}")
-    print(df[["name", "sizeGB", "playtimeH", "hoursPerGB",
+    print(df[["name", "size", "playtimeH", "hoursPerGB",
           "cumulativeSize", "cumulativeTime"]].to_string(index=False))
 
 
