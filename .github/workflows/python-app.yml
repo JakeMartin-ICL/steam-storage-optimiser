@@ -38,12 +38,6 @@ jobs:
       uses: JackMcKew/pyinstaller-action-windows@main
       with:
         path: src
-    - name: Debug Step
-      run: |
-        ls
-        ls src
-        ls src/dist
-        ls src/dist/windows
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -60,6 +54,6 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_name: steamStorageOptimiser.exe
-        asset_path: src/dist/windows
+        asset_path: src/dist/windows/steamStorageOptimiser.exe
         asset_content_type: application/octet-stream
 
