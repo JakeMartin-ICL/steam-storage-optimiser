@@ -80,7 +80,7 @@ def match_games(config, api_dict):
                         api_info = api_dict[appid]
                     except KeyError as e:
                         print(
-                            f"{Style.DIM}Failed to match {appid}: {game['name']}.{Style.RESET_ALL}")
+                            f"{Style.BRIGHT + Fore.BLACK}Failed to match {appid}: {game['name']}.{Style.RESET_ALL}")
                     else:
                         playtime = api_info["playtime_forever"]
                         size = int(game["SizeOnDisk"])
