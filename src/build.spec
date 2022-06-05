@@ -5,7 +5,7 @@ block_cipher = None
 
 
 a = Analysis(
-    ['src\\steamStorageOptimiser.py'],
+    ['steamStorageOptimiser.py'],
     pathex=[],
     binaries=[],
     datas=[],

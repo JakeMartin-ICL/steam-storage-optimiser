@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 jobs:
-  test:
+  build-release:
 
     runs-on: ubuntu-latest
 
@@ -42,17 +42,18 @@ jobs:
       id: create_release
       uses: actions/create-release@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.PAT }}
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        tag_name: ${{ github.run_number }}
+        release_name: Release ${{ github.run_number }}
         draft: false
         prerelease: false
     - uses: actions/upload-release-asset@v1
       env:
-        GITHUB_TOKEN: ${{ github.token }}
+        GITHUB_TOKEN: ${{ secrets.PAT }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_name: steamStorageOptimiser.exe
-        asset_path: src/dist/windows
+        asset_path: src/dist/windows/steamStorageOptimiser.exe
+        asset_content_type: application/octet-stream
 
