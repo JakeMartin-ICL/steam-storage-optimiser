@@ -59,4 +59,5 @@ jobs:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_name: steamStorageOptimiser.exe
         asset_path: src/dist/windows
+        asset_content_type: application/octet-stream
 
