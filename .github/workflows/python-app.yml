@@ -34,14 +34,16 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Debug Step
-      run: |
-        ls
-        ls src
     - name: Package Application
       uses: JackMcKew/pyinstaller-action-windows@main
       with:
         path: src
+    - name: Debug Step
+      run: |
+        ls
+        ls src
+        ls src/dist
+        ls src/dist/windows
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -58,6 +60,6 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_name: steamStorageOptimiser.exe
-        asset_path: dist/windows
+        asset_path: src/dist/windows
         asset_content_type: application/octet-stream
 
