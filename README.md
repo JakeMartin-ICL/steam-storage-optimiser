@@ -10,4 +10,4 @@ When run, the tool will find the size-on-disk of all ***installed*** games, then
 The Steam Web API provides no method for finding the size-on-disk for a game. As such, the only reliable way of collecting this data is looking at the *actual* size of your current installations. This means that ***games that you own but don't currently have installed can't be shown in the list***. 
 
 ## Installation
-Download the [latest release](https://github.com/JakeMartin-ICL/steam-storage-optimiser/releases/tag/19) and run - no installation necessary.
+Download the [latest release](https://github.com/JakeMartin-ICL/steam-storage-optimiser/releases/latest) and run - no installation necessary.
