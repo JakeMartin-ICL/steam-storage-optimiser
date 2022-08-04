@@ -65,6 +65,23 @@ def get_size_from_api(appid):
             f"API response invalid. Expected data, recieved:\n{api_response.text}. Report this issue on GitHub.")
     return api_response
 
+def get_sizes_from_api(appids):
+    url = f"https://eu5di55p9a.execute-api.eu-west-2.amazonaws.com/default/apps"
+    sizes = []
+    for i in range(0, len(appids), 100):
+        id_batch = appids[i:i + 100]
+        payload = {'ids': id_batch}
+
+        api_response = requests.get(url, json=payload)
+
+        try:
+            api_response = api_response.json()
+            sizes += api_response
+        except json.decoder.JSONDecodeError:
+            error(
+                f"API response invalid. Expected data, recieved:\n{api_response.text}. Report this issue on GitHub.")
+    return {game['AppId']: game for game in sizes} 
+
 
 def update_api_size(appid, size):
     url = f"https://eu5di55p9a.execute-api.eu-west-2.amazonaws.com/default/app/{appid}"
@@ -125,19 +142,25 @@ def match_games(owned_games, installed_games):
     games = []
     unmatched_games = []
 
+    db_sizes = get_sizes_from_api([game['appid'] for game in owned_games])
+    ok(f"Matched {len(db_sizes)} with database.") 
+
     for game in owned_games:
         appid = game['appid']
         if appid in installed_games:
             size = int(installed_games[appid]['SizeOnDisk'])
-            api_size = get_size_from_api(appid)
-            if api_size == None:
+            if appid in db_sizes:
+                api_size = db_sizes[appid]['Size']
+                if abs(api_size - size) > update_api_threshold:
+                    ok(f"Updating database. Your install size for {game['name']} is {humansize(size)}. The average size is {humansize(api_size)}")
+                    update_api_size(appid, size)
+            else:
                 ok(f"Adding to database. This is the first time {game['name']} has been seen.")
                 add_to_db(appid, size)
-            elif abs(api_size - size) > update_api_threshold:
-                ok(f"Updating database. Your install size for {game['name']} is {humansize(size)}. The average size is {humansize(api_size)}")
-                update_api_size(appid, size)
         else:
-            size = get_size_from_api(appid)
+            size = db_sizes.get(appid)
+            if size != None:
+                size = size['Size']
 
         playtime = game["playtime_forever"]
         if size != 0 and size != None:
