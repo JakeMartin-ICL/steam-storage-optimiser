@@ -104,7 +104,7 @@ def add_to_db(appid, size):
 
 def get_library_paths(config):
     try:
-        with open(f"{config['install_dir']}\\libraryfolders.vdf") as f:
+        with open(os.path.join(config['install_dir'], 'libraryfolders.vdf')) as f:
             libraries = vdf.parse(f)["libraryfolders"]
     except FileNotFoundError:
         error(
@@ -112,7 +112,7 @@ def get_library_paths(config):
 
     library_paths = []
     for library in libraries.values():
-        library_paths.append(library["path"] + "\\steamapps")
+        library_paths.append(os.path.join(library["path"], 'steamapps'))
     return library_paths
 
 
