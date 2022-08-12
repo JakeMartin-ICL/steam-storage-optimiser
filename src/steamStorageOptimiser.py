@@ -1,16 +1,20 @@
-import requests
+import json
 import os
 import sys
-import vdf
-import json
+
 import pandas as pd
+import psutil
+import requests
+import vdf
+from colorama import Fore, Style, init
 from hurry.filesize import size as prettySize
-from datetime import timedelta
-from cfs import error, warn, ok, note
-from colorama import init, Fore, Style
+
+from cfs import error, note, ok, warn
+
 init()
 
 update_api_threshold = 1024 ** 3
+tick = '✓' if psutil.Process(os.getppid()).name() != 'cmd.exe' else '√'
 
 
 def load_config():
@@ -81,7 +85,7 @@ def get_sizes_from_api(appids):
         except json.decoder.JSONDecodeError:
             error(
                 f"API response invalid. Expected data, recieved:\n{api_response.text}. Report this issue on GitHub.")
-    return {game['AppId']: game for game in sizes} 
+    return {game['AppId']: game for game in sizes}
 
 
 def update_api_size(appid, size):
@@ -144,7 +148,7 @@ def match_games(owned_games, installed_games):
     unmatched_games = []
 
     db_sizes = get_sizes_from_api([game['appid'] for game in owned_games])
-    ok(f"Matched {len(db_sizes)} with database.") 
+    ok(f"Matched {len(db_sizes)} with database.")
 
     for game in owned_games:
         appid = game['appid']
@@ -174,7 +178,7 @@ def match_games(owned_games, installed_games):
                           "playtimeH": '{:02d}:{:02d}'.format(*divmod(playtime, 60)),
                           "timePerByte": playtime/size,
                           "hoursPerGB": (playtime/60)/(size/1073741824),
-                          "installed": '✓' if installed else ''})
+                          "installed": tick if installed else ''})
         else:
             unmatched_games.append({"name": game["name"],
                                     "playtime": playtime,
