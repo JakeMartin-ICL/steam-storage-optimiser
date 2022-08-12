@@ -40,8 +40,8 @@ jobs:
       with:
         python-version: 3.7
 
-    - run: pip install -r requirements.txt pyinstaller
-    - run: pyinstaller steamStorageOptimiser.py
+    - run: pip install -r src/requirements.txt pyinstaller
+    - run: pyinstaller src/steamStorageOptimiser.py
 #     # Optionally verify that it works (provided that it does not need user interaction)
 #     - ./dist/your-code/your-code
 #     - uses: actions/upload-artifact@v2
