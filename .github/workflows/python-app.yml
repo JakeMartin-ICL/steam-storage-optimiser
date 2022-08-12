@@ -41,7 +41,7 @@ jobs:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: dist/steamStorageOptimiser/${{ matrix.artifact_name }}
         asset_name: ${{ matrix.asset_name }}
-        tag: ${{ github.ref }} 
+        tag: ${{ github.run_number }}
 #   build-releases:
 #     runs-on: ${{ matrix.os }}
 #     strategy:
