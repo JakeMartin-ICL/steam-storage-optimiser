@@ -65,6 +65,7 @@ def get_size_from_api(appid):
             f"API response invalid. Expected data, recieved:\n{api_response.text}. Report this issue on GitHub.")
     return api_response
 
+
 def get_sizes_from_api(appids):
     url = f"https://eu5di55p9a.execute-api.eu-west-2.amazonaws.com/default/apps"
     sizes = []
@@ -148,6 +149,7 @@ def match_games(owned_games, installed_games):
     for game in owned_games:
         appid = game['appid']
         if appid in installed_games:
+            installed = True
             size = int(installed_games[appid]['SizeOnDisk'])
             if appid in db_sizes:
                 api_size = db_sizes[appid]['Size']
@@ -158,6 +160,7 @@ def match_games(owned_games, installed_games):
                 ok(f"Adding to database. This is the first time {game['name']} has been seen.")
                 add_to_db(appid, size)
         else:
+            installed = False
             size = db_sizes.get(appid)
             if size != None:
                 size = size['Size']
@@ -170,7 +173,8 @@ def match_games(owned_games, installed_games):
                           "playtime": playtime,
                           "playtimeH": '{:02d}:{:02d}'.format(*divmod(playtime, 60)),
                           "timePerByte": playtime/size,
-                          "hoursPerGB": (playtime/60)/(size/1073741824)})
+                          "hoursPerGB": (playtime/60)/(size/1073741824),
+                          "installed": '✓' if installed else ''})
         else:
             unmatched_games.append({"name": game["name"],
                                     "playtime": playtime,
@@ -202,7 +206,7 @@ def output_games(games):
     print(
         f"\n{Fore.CYAN + Style.BRIGHT}Found and matched {df.shape[0]} installed games: {Style.RESET_ALL}")
     print(df[["name", "size", "playtimeH", "hoursPerGB",
-          "cumulativeSize", "cumulativeTime"]].to_string(index=False))
+          "cumulativeSize", "cumulativeTime", "installed"]].to_string(index=False))
 
 
 def output_unmatched(unmatched_games):
