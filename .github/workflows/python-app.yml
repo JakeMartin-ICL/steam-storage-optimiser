@@ -41,7 +41,7 @@ jobs:
         python-version: 3.7
 
     - run: pip install -r src/requirements.txt pyinstaller
-    - run: pyinstaller src/steamStorageOptimiser.py
+    - run: pyinstaller -F src/steamStorageOptimiser.py
 #     # Optionally verify that it works (provided that it does not need user interaction)
 #     - ./dist/your-code/your-code
 #     - uses: actions/upload-artifact@v2
@@ -52,7 +52,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        file: "build/*"
+        file: "dist/*"
         tags: false
         draft: true
         update_latest_release: true
