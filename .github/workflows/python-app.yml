@@ -47,11 +47,12 @@ jobs:
 #     - uses: actions/upload-artifact@v2
 #       with:
 #         path: dist/*
+    - run: ls -R
     - uses: xresloader/upload-to-github-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        file: "dist/*"
+        file: "build/*"
         tags: false
         draft: true
         update_latest_release: true
