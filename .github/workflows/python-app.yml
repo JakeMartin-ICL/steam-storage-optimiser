@@ -54,7 +54,7 @@ jobs:
       with:
         file: "dist/*"
         tags: false
-        draft: true
+        draft: false
         update_latest_release: true
     #     - uses: actions/upload-release-asset@v1
 #       env:
