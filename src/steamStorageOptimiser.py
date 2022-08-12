@@ -28,16 +28,23 @@ def load_config():
         ok("Loaded config file. To change, delete the config file to run setup again, or edit it directly.")
     except FileNotFoundError:
         warn("No config file found.")
+        if sys.platform == "linux" or sys.platform == "linux2":
+            install_dir = '~/.steam/steam/SteamApps'
+        elif sys.platform == "darwin":
+            install_dir = '~/Library/Application Support/Steam/SteamApps'
+        else:
+            install_dir = 'C:\\Program Files (x86)\\Steam\\steamapps'
+        warn(f"Setting Steam install location to default. If Steam is not installed at {install_dir}, you can change this in the config file.")
         key = input(
             "Enter your API key (create one here: https://steamcommunity.com/dev/apikey (domain is irrelevant)): ")
         steamid = input(
             "Enter your 64-bit SteamID (eg. use this tool https://www.steamidfinder.com/): ")
         config = {"key": key, "steamid": steamid,
-                  "install_dir": "C:\\Program Files (x86)\\Steam\\steamapps"}
+                  "install_dir": install_dir}
         with open("config.json", 'w') as f:
             json.dump(config, f)
         ok("Saved new config file.")
-        os.system("pause")
+        input("Press Enter to continue . . .")
     except json.decoder.JSONDecodeError:
         error("Malformed config file. Delete or fix the config file and try again.")
     return config
@@ -117,7 +124,8 @@ def get_library_paths(config):
 
     library_paths = []
     for library in libraries.values():
-        library_paths.append(os.path.join(library["path"], 'steamapps'))
+        if type(library) is dict:
+            library_paths.append(os.path.join(library["path"], 'steamapps'))
     return library_paths
 
 
@@ -230,7 +238,7 @@ def main():
     output_games(games)
     if len(unmatched_games) > 0:
         output_unmatched(unmatched_games)
-    os.system("pause")
+    input("Press Enter to exit . . .")
 
 
 if __name__ == '__main__':
