@@ -23,8 +23,8 @@ jobs:
             artifact_name: steamStorageOptimiser.exe
             asset_name: steamStorageOptimiser-windows.exe
           - os: macos-latest
-            artifact_name: steamStorageOptimiser
-            asset_name: steamStorageOptimiser-macos
+            artifact_name: steamStorageOptimiser.app
+            asset_name: steamStorageOptimiser-macos.app
             
     steps:
     - uses: actions/checkout@v2
@@ -34,7 +34,7 @@ jobs:
     - name: Install Requirements
       run: pip install -r src/requirements.txt pyinstaller
     - name: Build Release
-      run: pyinstaller -F src/steamStorageOptimiser.py
+      run: pyinstaller -F --windowed src/steamStorageOptimiser.py
     - run: ls -R
     - name: Upload binaries to release
       uses: svenstaro/upload-release-action@v2
