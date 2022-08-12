@@ -4,3 +4,4 @@ hurry.filesize==0.9
 pandas==1.3.4
 requests==2.26.0
 vdf==3.4
+psutil==5.9.1
