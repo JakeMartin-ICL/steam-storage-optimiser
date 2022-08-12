@@ -11,59 +11,87 @@ on:
 
 permissions:
   contents: write
-
-jobs:
-  create-release:
-    runs-on: 'ubuntu-latest'
-    steps:
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
-        with:
-          tag_name: ${{ github.run_number }}
-          release_name: Release ${{ github.run_number }}
-          draft: false
-          prerelease: false
   
-  build-releases:
+jobs:
+  publish:
+    name: Publish for ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false
       matrix:
-        os: ['windows-latest', 'ubuntu-latest', 'macos-latest']
-
+        include:
+          - os: ubuntu-latest
+            artifact_name: steamStorageOptimiser
+            asset_name: steamStorageOptimiser-linux
+          - os: windows-latest
+            artifact_name: steamStorageOptimiser.exe
+            asset_name: steamStorageOptimiser-windows
+          - os: macos-latest
+            artifact_name: steamStorageOptimiser
+            asset_name: steamStorageOptimiser-macos
+            
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-python@v2
+    - name: Install Requirements
+      run: pip install -r src/requirements.txt pyinstaller
+    - name: Build Release
+      run: pyinstaller -F src/steamStorageOptimiser.py
+    - name: Upload binaries to release
+      uses: svenstaro/upload-release-action@v2
       with:
-        python-version: 3.7
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: dist/steamStorageOptimiser/${{ matrix.artifact_name }}
+        asset_name: ${{ matrix.asset_name }}
+        tag: ${{ github.ref }} 
+#   build-releases:
+#     runs-on: ${{ matrix.os }}
+#     strategy:
+#       fail-fast: false
+#       matrix:
+#         os: ['windows-latest', 'ubuntu-latest', 'macos-latest']
 
-    - run: pip install -r src/requirements.txt pyinstaller
-    - run: pyinstaller -F src/steamStorageOptimiser.py
+#     steps:
+#     - name: Get latest release
+#       id: latest_release_info
+#       uses: jossef/action-latest-release-info@v1.1.0
+#     - uses: actions/checkout@v2
+#     - uses: actions/setup-python@v2
+#       with:
+#         python-version: 3.7
+
+#     - run: pip install -r src/requirements.txt pyinstaller
+#     - run: pyinstaller -F src/steamStorageOptimiser.py
 #     # Optionally verify that it works (provided that it does not need user interaction)
 #     - ./dist/your-code/your-code
 #     - uses: actions/upload-artifact@v2
 #       with:
 #         path: dist/*
-    - run: ls -R
-    - uses: xresloader/upload-to-github-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        file: "dist/*"
-        tags: false
-        draft: false
-        update_latest_release: true
-    #     - uses: actions/upload-release-asset@v1
+#     - run: ls -R
+#     - uses: xresloader/upload-to-github-release@v1
 #       env:
-#         GITHUB_TOKEN: ${{ secrets.PAT }}
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       with:
+#         file: "dist/*"
+#         tags: false
+#         draft: false
+#         update_latest_release: true
+#     - uses: actions/upload-release-asset@v1
+#       env:
+#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #       with:
 #         upload_url: ${{ steps.create_release.outputs.upload_url }}
 #         asset_name: steamStorageOptimiser.exe
-#         asset_path: src/dist/windows/steamStorageOptimiser.exe
+#         asset_path: src/dist/*
 #         asset_content_type: application/octet-stream
+#     - name: Upload binary to release
+#       uses: svenstaro/upload-release-action@v2
+#       with:
+#         repo_token: ${{ secrets.GITHUB_TOKEN }}
+#         file: dist/*
+#         file_glob: true
+#         asset_name: mything
+#         tag: ${{ github.ref }}
+#         overwrite: true
+#         body: "This is my release text"
 #     - uses: actions/upload-release-asset@v1
 #       env:
 #         GITHUB_TOKEN: ${{ secrets.PAT }}
