@@ -21,7 +21,7 @@ jobs:
             asset_name: steamStorageOptimiser-linux
           - os: windows-latest
             artifact_name: steamStorageOptimiser.exe
-            asset_name: steamStorageOptimiser-windows
+            asset_name: steamStorageOptimiser-windows.exe
           - os: macos-latest
             artifact_name: steamStorageOptimiser
             asset_name: steamStorageOptimiser-macos
