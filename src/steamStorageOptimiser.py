@@ -2,12 +2,14 @@ import json
 import os
 import sys
 
+import appdirs
 import pandas as pd
 import psutil
 import requests
 import vdf
 from colorama import Fore, Style, init
 from hurry.filesize import size as prettySize
+from pathlib import Path
 
 from cfs import error, note, ok, warn
 
@@ -19,15 +21,17 @@ tick = '✓' if psutil.Process(os.getppid()).name() != 'cmd.exe' else '√'
 
 def load_config():
     expected_keys = ["key", "steamid", "install_dir"]
+    config_dir = appdirs.user_config_dir("Steam Storage Optimiser")
 
     try:
-        with open('config.json') as f:
+        with open(os.path.join(config_dir, 'config.json')) as f:
             config = json.load(f)
         if not all(x in config for x in expected_keys):
             raise json.decoder.JSONDecodeError
         ok("Loaded config file. To change, delete the config file to run setup again, or edit it directly.")
     except FileNotFoundError:
         warn("No config file found.")
+        Path(config_dir).mkdir(parents=True, exist_ok=True)
         if sys.platform == "linux" or sys.platform == "linux2":
             install_dir = '~/.steam/steam/SteamApps'
         elif sys.platform == "darwin":
@@ -41,7 +45,7 @@ def load_config():
             "Enter your 64-bit SteamID (eg. use this tool https://www.steamidfinder.com/): ")
         config = {"key": key, "steamid": steamid,
                   "install_dir": install_dir}
-        with open("config.json", 'w') as f:
+        with open(os.path.join(config_dir, 'config.json'), 'w') as f:
             json.dump(config, f)
         ok("Saved new config file.")
         input("Press Enter to continue . . .")
