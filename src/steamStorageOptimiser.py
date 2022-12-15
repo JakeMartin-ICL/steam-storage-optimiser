@@ -31,7 +31,7 @@ def load_config():
         if sys.platform == "linux" or sys.platform == "linux2":
             install_dir = '~/.steam/steam/SteamApps'
         elif sys.platform == "darwin":
-            install_dir = '~/Library/Application Support/Steam/SteamApps'
+            install_dir = '~/Library/Application Support/Steam/steamapps'
         else:
             install_dir = 'C:\\Program Files (x86)\\Steam\\steamapps'
         warn(f"Setting Steam install location to default. If Steam is not installed at {install_dir}, you can change this in the config file.")
