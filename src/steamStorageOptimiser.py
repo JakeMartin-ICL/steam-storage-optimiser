@@ -28,7 +28,7 @@ def load_config():
             config = json.load(f)
         if not all(x in config for x in expected_keys):
             raise json.decoder.JSONDecodeError
-        ok("Loaded config file. To change, delete the config file to run setup again, or edit it directly.")
+        ok(f"Loaded config file. To change, edit or delete the config file in {config_dir}).")
     except FileNotFoundError:
         warn("No config file found.")
         Path(config_dir).mkdir(parents=True, exist_ok=True)
