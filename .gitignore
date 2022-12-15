@@ -128,3 +128,4 @@ dmypy.json
 .pyre/
 config.json
 steamStorageOptimiser.spec
+test.py
