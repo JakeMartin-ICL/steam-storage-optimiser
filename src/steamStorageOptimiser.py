@@ -120,7 +120,7 @@ def get_library_paths(config):
             libraries = vdf.parse(f)["libraryfolders"]
     except FileNotFoundError:
         error(
-            f"Problem with libraryfolders file. If Steam not installed at {Fore.YELLOW}{config['install_dir']}{Style.RESET_ALL}, edit your config file and try again.")
+            f"Problem finding libraryfolders.vdf file. If SteamApps folder is not located at {Fore.YELLOW}{config['install_dir']}{Style.RESET_ALL}, edit your config file and try again.")
 
     library_paths = []
     for library in libraries.values():
