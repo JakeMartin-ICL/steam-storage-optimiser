@@ -38,6 +38,11 @@ jobs:
       with:
         name: 'steamStorageOptimiser-macos'
         srcdir: './dist/${{ matrix.artifact_name }}'
+    - run: ls -R
+    - name: Relocate package
+      if: runner.os == 'macOS'
+      run: 'mv steamStorageOptimiser-macos.dmg dist'
+    - run: ls -R
     - name: Upload binaries to release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
