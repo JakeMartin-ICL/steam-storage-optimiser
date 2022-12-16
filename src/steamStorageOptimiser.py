@@ -34,9 +34,9 @@ def load_config():
         warn("No config file found.")
         Path(config_dir).mkdir(parents=True, exist_ok=True)
         if sys.platform == "linux" or sys.platform == "linux2":
-            install_dir = '~/.steam/steam/SteamApps'
+            install_dir = os.path.expanduser('~/.steam/steam/steamapps')
         elif sys.platform == "darwin":
-            install_dir = '~/Library/Application Support/Steam/steamapps'
+            install_dir = os.path.expanduser('~/Library/Application Support/Steam/steamapps')
         else:
             install_dir = 'C:\\Program Files (x86)\\Steam\\steamapps'
         warn(
