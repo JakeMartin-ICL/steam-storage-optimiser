@@ -5,16 +5,19 @@ A tool to help users decide which games to install or uninstall to save space.
 
 ## Installation
 ### Windows
-Download the [latest release](https://github.com/JakeMartin-ICL/steam-storage-optimiser/releases/latest) and run - no installation necessary. Windows will likely prevent the program running from an unknown publisher - choose 'Run anyway'.
+Download the [latest release](https://github.com/JakeMartin-ICL/steam-storage-optimiser/releases/latest) and run - no installation necessary. Windows will likely prevent the program running from an unknown publisher - choose *More info* -> *Run anyway*.
 
-### Mac and Linux
-Download the [latest release](https://github.com/JakeMartin-ICL/steam-storage-optimiser/releases/latest) and make the file executable (`chmod +x steamStorageOptimiser-[platform]`. See guide if unsure: [Mac](https://support.apple.com/en-gb/guide/terminal/apdd100908f-06b3-4e63-8a87-32e71241bab4/mac), [Linux](https://linuxhint.com/make-file-executable-linux/) ). 
+### Mac
+Download the [latest release](https://github.com/JakeMartin-ICL/steam-storage-optimiser/releases/latest) and make the file executable (`chmod +x steamStorageOptimiser-mac` or [see guide](https://support.apple.com/en-gb/guide/terminal/apdd100908f-06b3-4e63-8a87-32e71241bab4/mac)). When running for the first time, MacOS will prevent the program running from an unidentified developer - open *Settings* -> *Privacy & Security*, then choose *Open anyway* next to the message about steamStorageOptimiser being blocked, then click *Open*.
+
+### Linux
+Download the [latest release](https://github.com/JakeMartin-ICL/steam-storage-optimiser/releases/latest) and make the file executable (`chmod +x steamStorageOptimiser-linux` or [see guide](https://linuxhint.com/make-file-executable-linux/)).
 
 ## Functionality
 When run, the tool will find the size-on-disk of all installed games, then use the Steam Web API to match each game with your 'hours played' to calculate an 'hours played per GB'. As a measure of how efficiently a game has captured your interest in the past for its size, it's likely a reasonably good predictor for the future too. Using the cumulative columns, it's easy to find a selection of games for a given amount of space that might keep you most entertained, plus show how much time that selection has occupied so far.
 
 ## Limitations
-The Steam Web API provides no method for finding the size-on-disk for a game. The optimiser maintains a shared database to crowdsource this data so uninstalled games that you can be displayed too, as long as they've been seen installed before by anyone using this tool. If there's a game you own which hasn't been matched that you'd like to see your hours/GB for, you can temporarily download it then re-run the optimiser - it'll be added to the database and will help others in future too!
+The Steam Web API provides no method for finding the size-on-disk for a game. The optimiser maintains a shared database to crowdsource this data so uninstalled games that you own can be displayed too, as long as they've been seen installed before by anyone using this tool. If there's a game you own which hasn't been matched that you'd like to see your hours/GB for, you can temporarily download it then re-run the optimiser - it'll be added to the database and will help others in future too!
 
 ## Privacy
 The crowdsourced database contains only average file sizes. When using this software, if your installation size is different to the average file size or the game has not been registered in the database, **only your installation size is uploaded** and nothing more.
