@@ -1,22 +1,23 @@
 import json
 import os
+import platform
 import sys
+from pathlib import Path
 
 import appdirs
 import pandas as pd
-import psutil
 import requests
 import vdf
 from colorama import Fore, Style, init
 from hurry.filesize import size as prettySize
-from pathlib import Path
 
 from cfs import error, note, ok, warn
 
 init()
 
 update_api_threshold = 1024 ** 3
-tick = '✓' if psutil.Process(os.getppid()).name() != 'cmd.exe' else '√'
+tick = '√' if getattr(sys, 'frozen', False) and int(
+    platform.release()) == 10 else '✓'
 
 
 def load_config():
@@ -38,7 +39,8 @@ def load_config():
             install_dir = '~/Library/Application Support/Steam/steamapps'
         else:
             install_dir = 'C:\\Program Files (x86)\\Steam\\steamapps'
-        warn(f"Setting Steam install location to default. If Steam is not installed at {install_dir}, you can change this in the config file.")
+        warn(
+            f"Setting Steam install location to default. If Steam is not installed at {install_dir}, you can change this in the config file.")
         key = input(
             "Enter your API key (create one here: https://steamcommunity.com/dev/apikey (domain is irrelevant)): ")
         steamid = input(
