@@ -23,5 +23,5 @@ def note(message):
 
 def error(message):
     print(colour_first_sentence(message, Fore.RED + Style.BRIGHT))
-    os.system("pause")
+    input("Press Enter to quit . . .")
     sys.exit(1)
