@@ -101,18 +101,18 @@ def get_sizes_from_api(appids):
     return {game['AppId']: game for game in sizes}
 
 
-def update_api_size(appid, size):
+def update_api_size(appid, size, name):
     url = f"https://eu5di55p9a.execute-api.eu-west-2.amazonaws.com/default/app/{appid}"
-    payload = {'size': size}
+    payload = {'size': size, 'name': name}
 
     api_response = requests.put(url, params=payload)
     if api_response.status_code != requests.codes['ok']:
         error(f"Error while updating size database. Response: {api_response}")
 
 
-def add_to_db(appid, size):
+def add_to_db(appid, size, name):
     url = f"https://eu5di55p9a.execute-api.eu-west-2.amazonaws.com/default/app/{appid}"
-    payload = {'size': size}
+    payload = {'size': size, 'name': name}
 
     api_response = requests.post(url, params=payload)
     if api_response.status_code != requests.codes['ok']:
@@ -173,10 +173,10 @@ def match_games(owned_games, installed_games):
                 api_size = db_sizes[appid]['Size']
                 if abs(api_size - size) > update_api_threshold:
                     ok(f"Updating database. Your install size for {game['name']} is {humansize(size)}. The average size is {humansize(api_size)}")
-                    update_api_size(appid, size)
+                    update_api_size(appid, size, game['name'])
             else:
                 ok(f"Adding to database. This is the first time {game['name']} has been seen.")
-                add_to_db(appid, size)
+                add_to_db(appid, size, game['name'])
         else:
             installed = False
             size = db_sizes.get(appid)
