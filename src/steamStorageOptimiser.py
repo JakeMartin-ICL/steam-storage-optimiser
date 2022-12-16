@@ -9,7 +9,6 @@ import pandas as pd
 import requests
 import vdf
 from colorama import Fore, Style, init
-from hurry.filesize import size as prettySize
 
 from cfs import error, note, ok, warn
 
@@ -172,7 +171,7 @@ def match_games(owned_games, installed_games):
             if appid in db_sizes:
                 api_size = db_sizes[appid]['Size']
                 if abs(api_size - size) > update_api_threshold:
-                    ok(f"Updating database. Your install size for {game['name']} is {humansize(size)}. The average size is {humansize(api_size)}")
+                    ok(f"Updating database. Your install size for {game['name']} is {human_size(size)}. The average size is {human_size(api_size)}")
                     update_api_size(appid, size, game['name'])
             else:
                 ok(f"Adding to database. This is the first time {game['name']} has been seen.")
@@ -187,7 +186,7 @@ def match_games(owned_games, installed_games):
         if size != 0 and size != None:
             games.append({"name": game["name"],
                           "bsize": size,
-                          "size": prettySize(size),
+                          "size": human_size(size),
                           "playtime": playtime,
                           "playtimeH": '{:02d}:{:02d}'.format(*divmod(playtime, 60)),
                           "timePerByte": playtime/size,
@@ -201,7 +200,7 @@ def match_games(owned_games, installed_games):
     return (games, unmatched_games)
 
 
-def humansize(nbytes):
+def human_size(nbytes):
     suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
 
     i = 0
@@ -219,7 +218,7 @@ def output_games(games):
     df["cumulativeSize"] = df["bsize"].cumsum()
     df.cumulativeTime = df.cumulativeTime.apply(
         lambda x: '{:02d}:{:02d}'.format(*divmod(x, 60)))
-    df.cumulativeSize = df.cumulativeSize.apply(humansize)
+    df.cumulativeSize = df.cumulativeSize.apply(human_size)
 
     print(
         f"\n{Fore.CYAN + Style.BRIGHT}Found and matched {df.shape[0]} installed games: {Style.RESET_ALL}")
