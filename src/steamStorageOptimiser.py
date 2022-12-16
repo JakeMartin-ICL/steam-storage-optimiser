@@ -44,7 +44,7 @@ def load_config():
         key = input(
             "Enter your API key (create one here: https://steamcommunity.com/dev/apikey (domain is irrelevant)): ")
         steamid = input(
-            "Enter your 64-bit SteamID (eg. use this tool https://www.steamidfinder.com/): ")
+            "Enter your 64-bit SteamID (eg. use this tool https://www.steamidfinder.com/, it should look like 76561197960287930): ")
         config = {"key": key, "steamid": steamid,
                   "install_dir": install_dir}
         with open(os.path.join(config_dir, 'config.json'), 'w') as f:
