@@ -13,13 +13,13 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            artifact_name: steamStorageOptimiser
+            artifact_name: steamStorageOptimiser-linux
             asset_name: steamStorageOptimiser
           - os: windows-latest
-            artifact_name: steamStorageOptimiser.exe
+            artifact_name: steamStorageOptimiser-win.exe
             asset_name: steamStorageOptimiser.exe
           - os: macos-latest
-            artifact_name: steamStorageOptimiser.app
+            artifact_name: steamStorageOptimiser-mac
             asset_name: steamStorageOptimiser-macos.dmg
             
     steps:
@@ -30,21 +30,10 @@ jobs:
     - name: Install Requirements
       run: pip install -r src/requirements.txt pyinstaller
     - name: Build Release
-      run: pyinstaller -F --windowed src/steamStorageOptimiser.py
-    - run: ls -R
-    - name: Package
-      if: runner.os == 'macOS'
-      uses: QQxiaoming/create-dmg-action@v0.0.2
-      with:
-        name: 'steamStorageOptimiser-macos'
-        srcdir: './dist/${{ matrix.artifact_name }}'
-    - run: ls -R
-    - name: Relocate package
-      if: runner.os == 'macOS'
-      run: 'mv steamStorageOptimiser-macos.dmg dist'
+      run: pyinstaller --onefile --console src/steamStorageOptimiser.py --name {{ matrix.artifact_name }}
     - run: ls -R
     - name: Upload binaries to release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: ./dist/${{ matrix.asset_name }}
+        files: ./dist/${{ matrix.artifact_name }}
