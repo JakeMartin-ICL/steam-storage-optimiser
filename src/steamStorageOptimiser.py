@@ -220,8 +220,7 @@ def output_games(games):
         lambda x: '{:02d}:{:02d}'.format(*divmod(x, 60)))
     df.cumulativeSize = df.cumulativeSize.apply(human_size)
 
-    print(
-        f"\n{Fore.CYAN + Style.BRIGHT}Found and matched {df.shape[0]} installed games: {Style.RESET_ALL}")
+    note(f"\nFound and matched {df.shape[0]} installed games:")
     print(df[["name", "size", "playtimeH", "hoursPerGB",
           "cumulativeSize", "cumulativeTime", "installed"]].to_string(index=False))
 
@@ -230,8 +229,8 @@ def output_unmatched(unmatched_games):
     df = pd.DataFrame(unmatched_games)
     df.sort_values("playtime", ascending=False, inplace=True)
 
-    print(
-        f"\nFound {df.shape[0]} games not matched. These games are not installed and not yet in the database: ")
+    note(
+        f"\n{df.shape[0]} games not matched. These games are not installed and not yet in the database: ")
     print(df[["name", "playtimeH"]].to_string())
 
 

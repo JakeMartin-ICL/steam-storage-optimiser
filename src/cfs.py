@@ -1,11 +1,12 @@
-import os
 import sys
 from colorama import init, Fore, Style
 init()
 
 
 def colour_first_sentence(message, colour):
-    sentences = message.split('.', 1)
+    sentences = message.split('.', maxsplit=1)
+    if len(sentences) == 1:
+        return f"{colour}{sentences[0]}{Style.RESET_ALL}"
     return f"{colour}{sentences[0]}.{Style.RESET_ALL} {sentences[1]}"
 
 
@@ -18,7 +19,7 @@ def warn(message):
 
 
 def note(message):
-    print(colour_first_sentence(message, Fore.BLACK + Style.BRIGHT))
+    print(colour_first_sentence(message, Fore.CYAN + Style.BRIGHT))
 
 
 def error(message):
