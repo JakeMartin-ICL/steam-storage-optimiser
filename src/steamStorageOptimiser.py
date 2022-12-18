@@ -220,7 +220,7 @@ def output_games(games):
         lambda x: '{:02d}:{:02d}'.format(*divmod(x, 60)))
     df.cumulativeSize = df.cumulativeSize.apply(human_size)
 
-    note(f"\nFound and matched {df.shape[0]} installed games:")
+    note(f"\nFound and matched {df.shape[0]} games:")
     print(df[["name", "size", "playtimeH", "hoursPerGB",
           "cumulativeSize", "cumulativeTime", "installed"]].to_string(index=False))
 
