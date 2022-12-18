@@ -1,6 +1,5 @@
 import json
 import os
-import platform
 import sys
 from pathlib import Path
 
@@ -16,7 +15,7 @@ init()
 
 update_api_threshold = 1024 ** 3
 tick = '√' if getattr(
-    sys, 'frozen', False) and platform.release() == '10' else '✓'
+    sys, 'frozen', False) and sys.platform == 'win32' and sys.getwindowsversion().build < 22000 else '✓'
 
 
 def load_config():
