@@ -34,7 +34,8 @@ def load_config():
         if sys.platform == "linux" or sys.platform == "linux2":
             install_dir = os.path.expanduser('~/.steam/steam/steamapps')
         elif sys.platform == "darwin":
-            install_dir = os.path.expanduser('~/Library/Application Support/Steam/steamapps')
+            install_dir = os.path.expanduser(
+                '~/Library/Application Support/Steam/steamapps')
         else:
             install_dir = 'C:\\Program Files (x86)\\Steam\\steamapps'
         warn(
