@@ -213,6 +213,7 @@ def human_size(nbytes):
 
 def output_games(games):
     df = pd.DataFrame(games)
+    pd.options.display.float_format = "{:,.2f}".format
     df.sort_values("timePerByte", ascending=False, inplace=True)
     df["cumulativeTime"] = df["playtime"].cumsum()
     df["cumulativeSize"] = df["bsize"].cumsum()
